@@ -2,8 +2,16 @@ const getApiBaseUrl = () => {
   if (import.meta.env && import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  const hostname = window.location.hostname || "localhost";
-  return `http://${hostname}:5000`;
+  
+  const hostname = window.location.hostname;
+  
+  // If accessed via a network IP (e.g. mobile device on Wi-Fi), use that IP
+  if (hostname && /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname) && hostname !== "127.0.0.1") {
+    return `http://${hostname}:5000`;
+  }
+  
+  // Otherwise, strictly fallback to localhost (solves PC issues)
+  return "http://localhost:5000";
 };
 
 const API_BASE_URL = getApiBaseUrl();
