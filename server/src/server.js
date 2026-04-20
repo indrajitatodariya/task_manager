@@ -33,6 +33,24 @@ app.get("/", (_req, res) => {
 app.use("/products", productRoutes);
 app.use("/auth", authRoutes);
 
+
+// ✅ ✅ ADD THIS PART (IMPORTANT)
+
+// Serve frontend build
+const __dirname1 = path.resolve();
+
+// If your frontend build folder is inside server/dist
+app.use(express.static(path.join(__dirname1, "dist")));
+
+// React routing support
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname1, "dist", "index.html"));
+});
+
+
+// ✅ END
+
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
